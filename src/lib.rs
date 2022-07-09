@@ -2,6 +2,8 @@ use wasm_bindgen::prelude::*;
 use web_sys::console;
 use wasm_bindgen::JsCast;
 
+use rand::{thread_rng, Rng};
+
 // When attached to a pub function this attribute will configure the start 
 // section of the wasm executable to be emitted, executing the tagged function 
 // as soon as the wasm module is instantiated.
@@ -53,12 +55,16 @@ fn draw_triangle(   context: &web_sys::CanvasRenderingContext2d,
         context.set_fill_style(&wasm_bindgen::JsValue::from_str(&color_str));
 
         context.move_to(top.0, top.1);
+
         context.begin_path();
         context.line_to(left.0, left.1);
         context.line_to(right.0, right.1);
         context.line_to(top.0, top.1);
         context.close_path();
+
         context.stroke();
+        context.fill()
+
 }
 
 fn midpoint(point_1: (f64, f64), point_2: (f64, f64)) -> (f64, f64) {
@@ -74,14 +80,22 @@ fn sierpinski(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64); 
     let [top, left, right] = points;
 
     if depth > 0 {
-    let left_middle = midpoint(top, left);
-    let right_middle = midpoint(top, right);
-    let bottom_middle = midpoint(left, right);
+        let mut rng = thread_rng();
 
-    sierpinski(&context, [top, left_middle, right_middle], color, depth);
-    sierpinski(&context, [left_middle, left, bottom_middle], color, depth);
-    sierpinski(&context, [right_middle, bottom_middle, right], color, depth);
-}    
+        let next_color = (
+            rng.gen_range(0..255),
+            rng.gen_range(0..255),
+            rng.gen_range(0..255),
+        );
+
+        let left_middle = midpoint(top, left);
+        let right_middle = midpoint(top, right);
+        let bottom_middle = midpoint(left, right);
+
+        sierpinski(&context, [top, left_middle, right_middle], next_color, depth);
+        sierpinski(&context, [left_middle, left, bottom_middle], next_color, depth);
+        sierpinski(&context, [right_middle, bottom_middle, right], next_color, depth);
+    }    
 
 
 }
