@@ -30,7 +30,7 @@ pub fn main_js() -> Result<(), JsValue> {
         .unwrap()
         .dyn_into::<web_sys::CanvasRenderingContext2d>()?;
 
-    sierpinski(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)], 2);
+    sierpinski(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)], 5);
 
     //context.fill();
 
@@ -72,11 +72,8 @@ fn sierpinski(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64); 
     let bottom_middle = midpoint(left, right);
 
     sierpinski(&context, [top, left_middle, right_middle], depth);
-
     sierpinski(&context, [left_middle, left, bottom_middle], depth);
-
     sierpinski(&context, [right_middle, bottom_middle, right], depth);
-
 }    
 
 
