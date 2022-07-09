@@ -54,32 +54,30 @@ fn draw_triangle(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64
         context.stroke();
 }
 
+fn midpoint(point_1: (f64, f64), point_2: (f64, f64)) -> (f64, f64) {
+
+    ((point_1.0 + point_2.0) / 2.0, (point_1.1 + point_2.1) / 2.0)
+}
 
 fn sierpinski(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64); 3], depth: u8) {
     //draw_triangle(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)]);
     draw_triangle(&context, points);
     
     let depth = depth - 1;
-    /*
-    if depth > 0 { 
-        sierpinski(&context, [(300.0, 0.0), (150.00, 300.0),  (450.0, 300.0)], depth);
-        sierpinski(&context, [(150.0, 300.0), (0.0, 600.0), (300.0,600.0)], depth);
-        sierpinski(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)], depth);
-    }
-    */
     let [top, left, right] = points;
 
     if depth > 0 {
-        let left_middle = ((top.0 + left.0) / 2.0, (top.1 + left.1) / 2.0);
-        let right_middle = ((top.0 + right.0) / 2.0, (top.1 + right.1) / 2.0);
-        let bottom_middle = (top.0, right.1);
+    let left_middle = midpoint(top, left);
+    let right_middle = midpoint(top, right);
+    let bottom_middle = midpoint(left, right);
 
-        sierpinski(&context, [top, left_middle, right_middle], depth);
-        sierpinski(&context, [left_middle, left, bottom_middle], depth);
-        sierpinski(&context, [right_middle, bottom_middle, right], depth);
+    sierpinski(&context, [top, left_middle, right_middle], depth);
 
-    }    
+    sierpinski(&context, [left_middle, left, bottom_middle], depth);
 
+    sierpinski(&context, [right_middle, bottom_middle, right], depth);
+
+}    
 
 
 }
