@@ -2,7 +2,9 @@ use wasm_bindgen::prelude::*;
 use web_sys::console;
 use wasm_bindgen::JsCast;
 
-// When attached to a pub function this attribute will configure the start section of the wasm executable to be emitted, executing the tagged function as soon as the wasm module is instantiated.
+// When attached to a pub function this attribute will configure the start 
+// section of the wasm executable to be emitted, executing the tagged function 
+// as soon as the wasm module is instantiated.
 #[wasm_bindgen(start)]
 pub fn main_js() -> Result<(), JsValue> {
     console_error_panic_hook::set_once();
@@ -24,7 +26,7 @@ pub fn main_js() -> Result<(), JsValue> {
         .unwrap();
 */
     let context = canvas
-        .get_context("2d")?
+        .get_context("2d")? //  get_context returns a Result<Option<Object>>
         .unwrap()
         .dyn_into::<web_sys::CanvasRenderingContext2d>()?;
     /*
