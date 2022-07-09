@@ -1,2 +1,3 @@
 # wasm-Sierpi-ski
-an application that draws a Sierpiński triangle
+An application that draws a Sierpiński triangle, 
+in plain vanilla Rust/wasm.
