@@ -29,31 +29,12 @@ pub fn main_js() -> Result<(), JsValue> {
         .get_context("2d")? //  get_context returns a Result<Option<Object>>
         .unwrap()
         .dyn_into::<web_sys::CanvasRenderingContext2d>()?;
-    /*
-    context.move_to(300.0, 0.0); // top of triangle
-    context.begin_path();
-    context.line_to(0.0, 600.0); // bottom left of triangle
-    context.line_to(600.0, 600.0); // bottom right of triangle
-    context.line_to(300.0, 0.0); // back to top of triangle
-    context.close_path();
-    context.stroke();
 
-    draw_triangle(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)]);
-
-    draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)]);
-    draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)]);
-    draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
-    */
     sierpinski(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)], 2);
 
-    context.fill();
+    //context.fill();
 
     console::log_1(&JsValue::from_str("Hello world!"));
-
-    //context.set_fill_style(&"#0000FF".into());     
-    context.set_fill_style(&"rgb(150,50,0)".into());        
-    
-    context.fill_rect(15.0, 15.0, 80.0, 80.0);
 
     console::log_2(&"Color : %s ".into(),&context.fill_style().into());
 
@@ -75,9 +56,13 @@ fn draw_triangle(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64
 
 
 fn sierpinski(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64); 3], depth: u8) {
-    draw_triangle(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)]);
-    draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0),  (450.0, 300.0)]);
-    draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0,600.0)]);
-    draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
-
+    //draw_triangle(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)]);
+    draw_triangle(&context, points);
+    
+    let depth = depth - 1;
+    if depth > 0 { 
+        draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0),  (450.0, 300.0)]);
+        draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0,600.0)]);
+        draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
+    }
 }
